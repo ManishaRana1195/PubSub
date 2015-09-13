@@ -9,16 +9,15 @@ import java.util.HashMap;
  */
 public class PubSubLibrary {
 
-    public ArrayList<ISubscriber> subscriberList;
+    public ArrayList<ISubscriber> subscriberList = new ArrayList<ISubscriber>();
 
     HashMap<Topic,ArrayList> registeredSubscribers = new HashMap<Topic, ArrayList>();
 
     public void addSubscribers(Topic topic , ISubscriber newSubscriber){
-        ArrayList<ISubscriber> subscriberList = getSubscriberList(topic );
+        subscriberList = getSubscriberList(topic );
         if(subscriberList.contains(newSubscriber))
             System.out.println(newSubscriber +" has already subscribed to" + topic );
         else {
-            subscriberList = new ArrayList<ISubscriber>();
             subscriberList.add(newSubscriber);
             registeredSubscribers.put(topic, subscriberList);
         }
@@ -28,10 +27,10 @@ public class PubSubLibrary {
         ArrayList<ISubscriber> subscriberList = getSubscriberList(topic);
         if(subscriberList.contains(subscriber)) {
             subscriberList.remove(subscriber);
-            System.out.println(subscriber + " is removed");
+            System.out.println(subscriber + " has unregistered from "+ topic);
         }
         else
-            System.out.println(subscriber + " is not registered with "+topic );
+            System.out.println(subscriber + " has not subscribed to "+topic );
 
     }
 
@@ -42,10 +41,10 @@ public class PubSubLibrary {
         return subscriberList;
     }
 
-    public void notifySubscriber(Topic topic ) {
+    public void notifySubscriber(Topic topic,Float stockValue ) {
         subscriberList = getSubscriberList(topic );
         for( ISubscriber subscriber : subscriberList)
-            subscriber.notifyObserver(topic);
+            subscriber.notifyObserver(topic, stockValue );
     }
 
 }

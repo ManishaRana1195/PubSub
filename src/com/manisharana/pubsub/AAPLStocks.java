@@ -6,7 +6,8 @@ package com.manisharana.pubsub;
 public class AAPLStocks implements Topic {
     float stockValue ;
     String stockName ;
-    PubSubLibrary pubsub;
+    PubSubLibrary pubsub = new PubSubLibrary();
+
     public AAPLStocks(float stockValue) {
         this.stockValue = stockValue;
         this.stockName = "AAPL";
@@ -14,10 +15,21 @@ public class AAPLStocks implements Topic {
 
 
     @Override
+    public void addSubscribers(Client subscriber) {
+        pubsub.addSubscribers(this,subscriber);
+    }
+
+    @Override
+    public void removeSubscribers(Client subscriber) {
+        pubsub.removeSubscriber(this,subscriber);
+    }
+
+    @Override
     public void changeObservedValue(float newObservedValue) {
-        if(this.stockValue != newObservedValue)
+        if(this.stockValue != newObservedValue) {
             setObservedValue(newObservedValue);
-            pubsub.notifySubscriber(this);
+            pubsub.notifySubscriber(this, newObservedValue);
+        }
     }
 
     @Override
@@ -46,8 +58,6 @@ public class AAPLStocks implements Topic {
 
     @Override
     public String toString() {
-        return "Stocks{" +
-                "stockName='" + stockName + '\'' +
-                '}';
+        return stockName;
     }
 }
